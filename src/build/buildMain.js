@@ -2,6 +2,7 @@ import path from 'path';
 import packager from 'electron-packager';
 import tmp from 'tmp';
 import ncp from 'ncp';
+import _ from 'lodash';
 import async from 'async';
 import hasBinary from 'hasbin';
 import log from 'loglevel';
@@ -63,8 +64,22 @@ function buildMain(options, callback) {
         (options, callback) => {
             progress.tick('packaging');
             // maybe skip passing icon parameter to electron packager
-            const packageOptions = maybeNoIconOption(options);
+            let packageOptions = maybeNoIconOption(options);
 
+            // add some windows specific strings
+            packageOptions = _.merge(packageOptions,
+              {
+                'version-string': {
+                  'CompanyName': 'Coar',
+                  'FileDescription' : 'Coar',
+                  'OriginalFilename' : 'Coar.exe',
+                  'FileVersion' : '0.0.1',
+                  'ProductVersion' : '0.0.1',
+                  'ProductName' : 'Coar',
+                  'InternalName' : 'Coar.exe'
+                }
+              }
+            )
             packagerConsole.override();
 
             packager(packageOptions, (error, appPathArray) => {
