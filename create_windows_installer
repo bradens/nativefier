@@ -2,13 +2,18 @@
 
 var electronInstaller = require('electron-winstaller');
 
+var name = process.argv[2]
+
+console.log("Creating windows installer for", name)
+
 var resultPromise = electronInstaller.createWindowsInstaller({
-    appDirectory: '/Users/bradensimpson/DropBox/CoarApps/Coar-win32-x64',
+    appDirectory: '/Users/bradensimpson/DropBox/CoarApps/' + name + '-win32-x64',
     outputDirectory: '/Users/bradensimpson/DropBox/CoarApps/installer',
     authors: 'Coar',
-    description: 'Coar',
-    title: 'Coar',
-    exe: 'Coar.exe'
+    description: name,
+    title: name,
+    exe: name + '.exe',
+    setupExe: name + ' Setup.exe'
 });
 
 resultPromise.then(() => console.log('Created Installer'), e => console.log(`Failed to create installer with error: ${e.message}`));
